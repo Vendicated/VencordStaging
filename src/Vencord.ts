@@ -148,3 +148,5 @@ document.addEventListener("DOMContentLoaded", () => {
         }));
     }
 }, { once: true });
+
+console.log("awa");

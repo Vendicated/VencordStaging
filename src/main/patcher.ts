@@ -24,7 +24,7 @@ import { initIpc } from "./ipcMain";
 import { RendererSettings } from "./settings";
 import { IS_VANILLA } from "./utils/constants";
 
-console.log("[Vencord] Starting up...");
+console.log("[Vencord] Starting up... :3");
 
 // FIXME: remove at some point
 const isLegacyNonAsarVencord = IS_STANDALONE && !__dirname.endsWith(".asar");
