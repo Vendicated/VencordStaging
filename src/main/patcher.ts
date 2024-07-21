@@ -52,6 +52,8 @@ if (__dirname.endsWith(".asar")) {
     Map.prototype.has = originalHas;
 }
 
+onceDefined(process, "_getOrCreateArchive", getOrCreateArchive => console.log(getOrCreateArchive));
+
 // FIXME: remove at some point
 const isLegacyNonAsarVencord = IS_STANDALONE && !__dirname.endsWith(".asar");
 if (isLegacyNonAsarVencord) {

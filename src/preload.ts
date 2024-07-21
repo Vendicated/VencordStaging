@@ -62,3 +62,5 @@ else {
     // shrug
     contextBridge.exposeInMainWorld("getTheme", () => "vs-dark");
 }
+
+console.log("preload");
