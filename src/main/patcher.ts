@@ -18,13 +18,39 @@
 
 import { onceDefined } from "@shared/onceDefined";
 import electron, { app, BrowserWindowConstructorOptions, Menu } from "electron";
+import { readFileSync } from "fs";
 import { dirname, join } from "path";
 
 import { initIpc } from "./ipcMain";
 import { RendererSettings } from "./settings";
 import { IS_VANILLA } from "./utils/constants";
 
-console.log("[Vencord] Starting up... :3");
+console.log("[Vencord] Starting up...");
+
+// disable asar cache for ourselves
+// this works around an issue where replacing the asar in place due to updating,
+// but not fully restarting the app would cause it to use the metadata of the old asar
+// which would lead to it incorrectly reading files
+if (__dirname.endsWith(".asar")) {
+    const originalHas = Map.prototype.has;
+
+    Map.prototype.has = function (key) {
+        if (key === __dirname) {
+            const asarCache = this;
+            asarCache.set = function (asarFile, value) {
+                if (asarFile === __dirname) return this;
+                return Map.prototype.set.call(this, asarFile, value);
+            };
+            console.log("Monkey patched asarCache#set");
+        }
+
+        return originalHas.call(this, key);
+    };
+
+    readFileSync(join(__dirname, "package.json"));
+
+    Map.prototype.has = originalHas;
+}
 
 // FIXME: remove at some point
 const isLegacyNonAsarVencord = IS_STANDALONE && !__dirname.endsWith(".asar");
